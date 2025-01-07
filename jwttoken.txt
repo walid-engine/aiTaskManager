@@ -1,0 +1,118 @@
+1. Installation des dépendances :
+Tu commences par installer les packages nécessaires :
+
+npm install jsonwebtoken
+jsonwebtoken : Ce package permet de générer et de vérifier les tokens JWT.
+
+2. Organisation du projet :
+Tu crées un dossier tokenService pour y stocker les fichiers qui géreront la logique de génération et de vérification des tokens.
+
+jwtUtils.js : Contient les fonctions pour générer et vérifier les tokens.
+routeMiddleware.js : Contient le middleware qui vérifie le token avant de permettre l'accès à certaines routes.
+
+3. Contenu de jwtUtils.js :
+Dans ce fichier, tu définis deux fonctions principales :
+
+generateToken :
+Génère un token JWT signé avec une clé secrète et une durée d'expiration.
+
+import jwt from "jsonwebtoken";
+
+// Générer un token
+export function generateToken(payload) {
+    return jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES_IN });
+}
+payload : Ce sont les données à inclure dans le token (par exemple, l'ID de l'utilisateur).
+expiresIn : Détermine la durée de validité du token (par exemple, 1h pour une heure).
+verifyToken :
+Vérifie un token JWT en le décodant et en validant sa signature.
+
+// Vérifier un token
+export function verifyToken(token) {
+    try {
+        return jwt.verify(token, process.env.JWT_SECRET);
+    } catch (error) {
+        throw new Error("Token invalide ou expiré");
+    }
+}
+Si le token est invalide ou expiré, une erreur est levée.
+
+4. Contenu de routeMiddleware.js :
+Dans ce fichier, tu définis un middleware qui intercepte les requêtes pour vérifier si elles contiennent un token valide dans l'en-tête Authorization.
+
+import { verifyToken } from "./jwtUtils.js";
+
+export function authenticateJWT(req, res, next) {
+    const authHeader = req.headers.authorization;
+
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+        return res.status(401).json({ message: "Token manquant ou invalide" });
+    }
+
+    const token = authHeader.split(" ")[1];
+    console.log("Token reçu par le middleware:", token);
+
+    try {
+        const decoded = verifyToken(token);
+        req.user = decoded; // Ajoute les infos utilisateur au request
+        next();
+    } catch (error) {
+        console.log(error);
+        res.status(401).json({ message: "Token invalide ou expiré" });
+    }
+}
+
+
+Explication du middleware authenticateJWT :
+authHeader : Vérifie que l'en-tête Authorization existe et commence par Bearer (la convention pour les tokens).
+Token : Le token est extrait de l'en-tête après Bearer .
+Vérification du token : Le token est ensuite validé via la fonction verifyToken.
+Si le token est valide, les informations utilisateur sont ajoutées à req.user, ce qui permet de les utiliser dans la suite de la requête.
+Si le token est invalide ou expiré, une erreur est renvoyée avec un message approprié.
+
+5. Application du middleware dans les routes :
+Dans tes routes, tu appliques le middleware authenticateJWT pour sécuriser l'accès aux routes protégées. Par exemple, tu veux sécuriser les routes pour les tâches.
+
+
+router.route("/")
+    .get(authenticateJWT, getAllTasks)   // Récupérer toutes les tâches
+    .post(authenticateJWT, handleUserMessage); // Analyser un message utilisateur
+Le middleware authenticateJWT est ajouté avant les fonctions getAllTasks et handleUserMessage pour s'assurer que l'utilisateur est authentifié avant d'exécuter ces actions.
+Si l'utilisateur n'envoie pas de token valide, il reçoit un message d'erreur avec le statut 401 Unauthorized.
+
+6. Utilisation du token côté client :
+Le client doit envoyer le token JWT dans l'en-tête Authorization de ses requêtes. Par exemple, dans une requête fetch :
+
+fetch("/tasks", {
+    method: "GET",
+    headers: {
+        "Authorization": `Bearer ${token}` // Ajoute le token JWT dans l'en-tête
+    }
+})
+
+Le token JWT est récupéré du stockage local (localStorage) ou de la session de l'utilisateur et est envoyé dans l'en-tête Authorization.
+
+7. Déconnexion (Facultatif) :
+Puisque les tokens sont stateless (pas stockés sur le serveur), la déconnexion implique simplement de supprimer le token du stockage côté client. Si tu veux gérer la révocation de token, tu devras ajouter une liste noire côté serveur, mais ce n'est pas strictement nécessaire pour les cas basiques.
+
+Résumé complet :
+JWT (JSON Web Token) est utilisé pour authentifier les utilisateurs sans maintenir de sessions côté serveur.
+Génération du token : Créé avec jsonwebtoken en utilisant un payload (par exemple, l'ID utilisateur), une clé secrète et une durée d'expiration.
+Vérification du token : Avant d'accéder à certaines routes, le token est vérifié à l'aide du middleware authenticateJWT qui valide le token envoyé dans l'en-tête Authorization.
+Utilisation du middleware : Le middleware est ajouté à chaque route que tu souhaites sécuriser.
+Déconnexion : La déconnexion implique simplement de supprimer le token côté client (localStorage, cookies).
+Avec ce récapitulatif, tu devrais pouvoir implémenter et utiliser JWT pour sécuriser tes routes dans l'application. Tu peux garder ce résumé à portée de main pour t'en souvenir lors de l'intégration de l'authentification dans tes applications. 😊
+
+
+
+--------------------cool-----------------
+
+Récapitulatif
+
+Connexion et génération du token : Lorsque l'utilisateur se connecte, un token JWT est généré avec l'ID de l'utilisateur dans le payload.
+
+Vérification du token : À chaque requête protégée, le middleware JWT vérifie le token, le décode et ajoute les informations décodées (comme l'ID de l'utilisateur) à req.user.
+
+Utilisation de req.user dans les contrôleurs : Tu peux maintenant accéder à req.user.userId dans tes contrôleurs pour associer des ressources (comme des tâches) à l'utilisateur connecté.
+
+Cela permet de sécuriser tes routes et de t'assurer que chaque utilisateur ne peut accéder qu'à ses propres données.

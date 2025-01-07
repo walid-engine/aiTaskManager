@@ -1,0 +1,70 @@
+integration tawlin css
+
+Tailwind installé a l'aide de la doc source : https://tailwindcss.com/docs/installation
+
+extension tailwind installlé sur vscode
+
+on a utilisé material-icons de google pour nos icones
+
+créé un modal personnalisé
+
+1. Flexbox :
+Utilisation de flex pour gérer la disposition des éléments.
+flex-row (par défaut) pour une disposition horizontale, et flex-col pour une disposition verticale.
+justify-* : Contrôle l'alignement des éléments le long de l'axe principal (horizontal ou vertical).
+Exemple : justify-center, justify-between, justify-start, justify-end.
+items-* : Contrôle l'alignement des éléments le long de l'axe transversal.
+Exemple : items-center, items-start, items-end.
+flex-1 : Permet à un élément de prendre tout l'espace disponible.
+
+2. Margin et Padding :
+m-* : Définit une marge sur tous les côtés.
+Exemple : m-4 (4 unités de marge).
+p-* : Définit un padding sur tous les côtés.
+Exemple : p-4 (4 unités de padding).
+px-* et py-* : Respectivement pour padding horizontal et vertical.
+Exemple : px-4, py-4.
+
+4. Backgrounds :
+bg-* : Définit la couleur de fond.
+Exemple : bg-blue-500, bg-gray-100.
+bg-opacity-* : Définit l'opacité du fond.
+Exemple : bg-opacity-50.
+
+5. Bordures :
+border : Ajoute une bordure autour de l'élément.
+border-* : Définit la couleur de la bordure.
+Exemple : border-gray-300, border-red-500.
+rounded : Arrondit les coins de l'élément.
+Exemple : rounded-lg, rounded-full.
+
+6. Espacement et Alignement :
+space-x-* et space-y-* : Ajoute de l'espace entre les éléments enfants (horizontal et vertical).
+Exemple : space-x-4, space-y-4.
+text-center, text-left, text-right : Alignement du texte.
+items-center : Centre les éléments sur l'axe transversal dans un conteneur flex.
+
+7. Couleurs et Ombres :
+text-* : Définit la couleur du texte.
+Exemple : text-white, text-gray-800.
+shadow-* : Ajoute des ombres autour des éléments.
+Exemple : shadow-lg, shadow-sm.
+hover:bg-* : Change la couleur de fond lors du survol.
+Exemple : hover:bg-blue-700.
+
+8. Centrage des éléments :
+Utilisation de flex avec items-center et justify-center pour centrer un élément à la fois horizontalement et verticalement dans un conteneur.
+
+9. Formulaires et Input :
+input : Ajout de style aux champs de formulaire.
+Exemple : w-full, p-2, rounded.
+select : Liste déroulante pour les champs de sélection.
+Exemple : p-2, rounded, border-gray-300.
+placeholder : Stylisation du texte de remplacement dans les champs de formulaire.
+Exemple : placeholder-gray-500.
+
+10. Utilisation de Modal :
+Ajout d'un fond semi-transparent avec bg-opacity-50 pour un modal.
+Utilisation de fixed pour fixer le modal par rapport à l'écran, avec inset-0 pour le placer à 0 distance des bords de l'écran.
+Structure de modal avec un fond blanc et des bords arrondis grâce à bg-white et rounded-lg.
+

@@ -1,0 +1,34 @@
+version: '3.8'
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "5000:9090" # Port externe (5000) lié au port interne (9090)
+    environment:
+      - NODE_ENV=development
+      - PORT=9090
+      - MONGO_URI=mongodb://mongodb:27017/db_task # Correct URI nom pointe directement vers le conteneur MongoDB
+    depends_on:
+      - mongodb # Nom du conteneur MongoDB pour rester cohérent
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:80" # Port frontend (3000)
+    depends_on:
+      - backend
+
+  mongodb: # Changer 'mongo' en 'mongodb' pour cohérence
+    image: mongo:5.0
+    container_name: mongodb
+    ports:
+      - "27017:27017" # Port MongoDB
+    volumes:
+      - mongo_data:/data/db
+
+volumes:
+  mongo_data:

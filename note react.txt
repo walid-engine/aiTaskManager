@@ -1,0 +1,29 @@
+jai utilisé react-router-dom  pour naviguer entre les pages
+
+	La différence entre Link et useNavigate dans React Router
+
+Navigation à partir d'un bouton ou d'un lien	Link	Simple, gère les clics directement.(menu, redirection dans un texte, etc.). Utilisé dans le rendu JSX pour naviguer entre les pages.
+
+Redirection après un événement ou une condition	useNavigate	Navigation dynamique basée sur une action.(par exemple, après une authentification). Utilisé dans des fonctions (souvent après une action comme un clic ou une soumission de formulaire).
+
+je peu directement définir les routes sans avoir à encapsuler avec Router parce que j'utilises BrowserRouter dans mon fichier index.js. Cela fonctionne parce que BrowserRouter dans index.js englobe tout le projet, et tous les composants enfants peuvent utiliser le routage sans configuration supplémentaire.
+
+jai utilisé axios dans le front pour mes requetes : npm install axios
+
+Creation d'un dossier services (authService) couche qui s'occupe des appels API (en utilisant Axios), de la gestion des tokens, et de la logique de connexion (methode loginUser(fait la nrquete aevec axios email pass et en entete le token),logoutUser(supprimer juste le token stocké en local) et getToken(prendre le token stocké en local)) parce quon aura besoin du token pour faire les requetes. 
+
+et j'utilise le localStorage pour stocker les information de l'utilisateur comme le token et l'user en la convertissant en chaine Json dabord avec : JSON.stringify pour recuperer il faut juste utiliser JSON.parse()
+
+
+//maintenant il faut gerer la securité pour lacces au page a seuelemtn les user connecté donc on a Créer un composant ProtectedRoute
+Ce composant va vérifier si l'utilisateur est connecté (grâce au token stocké). Si ce n'est pas le cas, il redirige l'utilisateur vers la page de connexion. et  j'Utilise le composant ProtectedRoute pour protéger les pages dans APP
+
+Frontend : Dans le composant ProtectedRoute, on regarde si ya le token qui existe dans le localStorage pour déterminer si l'utilisateur est authentifié et, en fonction de cela, rediriger l'utilisateur vers la page de connexion ou afficher le contenu protégé.
+
+difficulté rencontré lorsquon a voulu rendre le token expirable a été reporté
+
+
+//--------------------------------------------------------concernant les routes------------------------------------
+toutes les routes qui on AuthentificateJWT verifie l'entete et orend le token le decode en extrayant les info de lutilisateur que javait utilisé pour créer le token et stock dans req.user dans la requete. pour le traitement avec ia je prend liud de user et le passe dans la requete pour quil classe. pour sans ia je lajoute dans le corp
+
+

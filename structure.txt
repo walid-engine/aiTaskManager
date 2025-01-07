@@ -1,0 +1,56 @@
+Backend : Node.js, Express, MongoDB (via Mongoose)
+Frontend : React, React Router, TailwindCSS
+Authentification : JWT, bcrypt
+API : Google Generative AI
+Autres : Axios, React Toastify, SweetAlert2
+Structure du projet :
+
+Backend organisé en architecture MVC avec controllers, models, routes et services
+Frontend organisé en composants React avec pages et services
+Packages clés et leur utilité :
+
+Backend :
+Express : Framework web
+Mongoose : ORM pour MongoDB
+JWT : Gestion des tokens d'authentification
+Google Generative AI : Intégration IA
+Frontend :
+React : Bibliothèque UI
+React Router : Gestion des routes
+TailwindCSS : Framework CSS
+Axios : Requêtes HTTP
+
+
+--------------------------------------Architecture--------------------------------------
+nb: pour la suppression et la modif la fonction reload es envoyé en param pour reload
+
+Structure en couches (routes, controllers, services, models)
+Utilisation d'Express comme framework web
+Connexion à MongoDB via Mongoose
+Flux de traitement
+a. Requête HTTP reçue
+b. Routage vers le bon controller
+c. Vérification de l'authentification (middleware JWT)
+d. Appel au service approprié
+e. Interaction avec la base de données via le modèle
+f. Retour de la réponse au client
+
+Structure des données
+
+Modèle Task avec :
+Titre (string, required)
+Description (string, required)
+Date d'échéance (date)
+Priorité (enum: low, medium, high)
+Statut (enum: pending, in-progress, completed)
+Référence à l'utilisateur (ObjectId)
+Gestion des erreurs
+
+Try/catch dans les controllers
+Retour de codes HTTP appropriés
+Messages d'erreur clairs
+Sécurité
+
+Authentification JWT
+Validation des données via Mongoose
+Protection des routes via middleware
